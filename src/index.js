@@ -37,7 +37,7 @@ function worker(instrument, position) {
     stocks.getPrice(instrument).then(value => {
         const now = new Date().getMilliseconds();
         if (value != null) {
-            discord.changeName(value, position).then(res => {
+            discord.changeName(value, position).then(() => {
                 const finish = new Date().getMilliseconds();
                 const time = finish - now;
 
