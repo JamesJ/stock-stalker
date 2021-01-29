@@ -26,7 +26,7 @@ const argv = yargs
 function initDiscordConnection() {
     console.log("Starting...")
 
-    discord.login(argv.token).then(value => {
+    discord.login(argv.token).then(() => {
         worker(argv.instrument, argv.position)
     })
 }
