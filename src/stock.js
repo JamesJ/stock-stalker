@@ -18,7 +18,7 @@ async function getPrice(instrument) {
 
 let lastPrice
 let closed
-function getCurrentPricingObject(instrument) {
+async function getCurrentPricingObject(instrument) {
     const obj = {}
     obj.name = instrument.symbol
 
@@ -64,7 +64,7 @@ function getCurrentPricingObject(instrument) {
         text = "Failed to refresh";
     } else {
         if (obj.halted) {
-            text = "HALTED @ $" + obj.price.toFixed(2)
+            text = "$" + obj.price.toFixed(2)
         } else if (obj.closed) {
             text = "Close @ $" + obj.price.toFixed(2)
         } else {
@@ -80,6 +80,7 @@ function getCurrentPricingObject(instrument) {
 
     obj.text = text
 
+    obj.halted = await isHalted(instrument)
     return obj
 }
 
@@ -110,6 +111,30 @@ const getSingleStockInfo = stock =>
             })
             .catch(err => reject(err));
     });
+
+const isHalted = instrument => {
+    new Promise((resolve, reject) => {
+        if (!stock) {
+            return reject(Error('Stock symbol required'));
+        }
+        if (typeof stock !== 'string') {
+            return reject(Error(`Invalid argument type. Required: string. Found: ${typeof stock}`));
+        }
+
+        const url = `https://api.iextrading.com/1.0/deep/trading-status?symbols=${stock}`;
+
+        return axios
+            .get(url)
+            .then((res) => {
+                const {data} = res;
+                if (!data || !data[instrument]) {
+                    return reject(new Error(`Error retrieving halt status for symbol ${stock}`));
+                }
+                return resolve(data[instrument].status === "H");
+            })
+            .catch(err => reject(err));
+    });
+}
 
 export default {
     getPrice: getPrice

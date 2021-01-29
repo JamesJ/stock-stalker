@@ -32,7 +32,9 @@ async function changeName(obj, ordering) {
     const now = Date.now()
     if (lastPresenceUpdate < (now - 4001) && !obj.soon) {
         let status
-        if (obj.closed) {
+        if (obj.halted) {
+            status = "MARKET HALTED"
+        } else if (obj.closed) {
             status = "the market sleep, you should too."
         } else {
             status = "$" + obj.name + " go "
