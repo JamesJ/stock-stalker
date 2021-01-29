@@ -1,4 +1,3 @@
-console.log("Starting...")
 import discord from './discord'
 import stocks from './stock'
 
@@ -25,6 +24,8 @@ const argv = yargs
     .argv;
 
 function initDiscordConnection() {
+    console.log("Starting...")
+
     discord.login(argv.token).then(value => {
         worker(argv.instrument, argv.position)
     })
