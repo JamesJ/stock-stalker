@@ -22,19 +22,16 @@ async function getCurrentPricingObject(instrument) {
 
     if (instrument.marketState === "PRE") {
         obj.price = instrument.preMarketPrice;
-        obj.percentage = instrument.preMarketChangePercent
+        obj.percentage = instrument.preMarketChangePercent;
     } else if (instrument.marketState === "POST") {
         obj.price = instrument.postMarketPrice;
-        obj.percentage = instrument.postMarketChangePercent
+        obj.percentage = instrument.postMarketChangePercent;
     } else if (instrument.marketState === "CLOSED") {
         obj.closed = true;
-        obj.lastPrice = instrument.postMarketPrice
+        obj.price = instrument.postMarketPrice;
     } else {
         obj.price = instrument.regularMarketPrice;
         obj.percentage = instrument.regularMarketChangePercent;
-        if (!instrument.tradeable && obj.price === lastPrice) {
-            //obj.halted = true
-        }
     }
 
     if (obj.price === undefined) {
@@ -59,16 +56,11 @@ async function getCurrentPricingObject(instrument) {
     if (obj.price == null) {
         text = "Failed to refresh";
     } else {
-        if (obj.halted) {
+        if (obj.halted || obj.closed) {
             text = "$" + obj.price.toFixed(2)
-        } else if (obj.closed) {
-            text = "Close @ $" + obj.price.toFixed(2)
         } else {
             text = "$" + obj.price.toFixed(2);
-
-            if (obj.closed) {
-                text += " (Closed)"
-            } else if (!isNaN(obj.move) && obj.move !== 0 && obj.move !== undefined) {
+            if (!isNaN(obj.move) && obj.move !== 0 && obj.move !== undefined) {
                 text += " (" + (obj.move > 0 ? "+" : "") + obj.move.toFixed(2) + ")";
             }
         }
