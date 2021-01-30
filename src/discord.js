@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-const roleMap = require('../guilds.json')
+const roleMap = require('../guilds.json');
 
-let lastPresenceUpdate
+let lastPresenceUpdate;
 function getColor(guild) {
     return roleMap[guild]
 }
@@ -14,7 +14,7 @@ client.on("warn", function (info) {
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    lastPresenceUpdate = Date.now()
+    lastPresenceUpdate = Date.now();
 
     client.user.setActivity("stocks go brrr", {type: 'WATCHING'})
         .then(console.log)
@@ -27,17 +27,17 @@ function login(token) {
 
 
 async function changeName(obj, ordering) {
-    const promises = []
+    const promises = [];
 
-    const now = Date.now()
+    const now = Date.now();
     if (lastPresenceUpdate < (now - 4001) && !obj.soon) {
-        let status
+        let status;
         if (obj.halted) {
             status = "MARKET HALTED"
         } else if (obj.closed) {
             status = "the market sleep, you should too."
         } else {
-            status = "$" + obj.name + " go "
+            status = "$" + obj.name + " go ";
             if (obj.direction === "down") {
                 status += "↘"
             } else {
@@ -52,9 +52,9 @@ async function changeName(obj, ordering) {
         lastPresenceUpdate = now
     }
 
-    console.log("Current state: " + JSON.stringify(obj))
+    console.log("Current state: " + JSON.stringify(obj));
     if (obj.direction !== "same") {
-        let name = ordering + "). " + obj.text
+        let name = ordering + "). " + obj.text;
 
         client.guilds.cache.forEach(guild => {
             const member = guild.members.resolve(client.user.id);

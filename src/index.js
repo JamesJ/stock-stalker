@@ -24,14 +24,14 @@ const argv = yargs
     .argv;
 
 function initDiscordConnection() {
-    console.log("Starting...")
+    console.log("Starting...");
 
     discord.login(argv.token).then(() => {
         worker(argv.instrument, argv.position)
     })
 }
 
-initDiscordConnection()
+initDiscordConnection();
 
 function worker(instrument, position) {
     stocks.getPrice(instrument).then(value => {
@@ -51,10 +51,10 @@ function worker(instrument, position) {
                     // rather than 1 minute from the finish of the update
                     delay -= time
                 }
-                console.log("Took " + time + "ms to execute everything")
+                console.log("Took " + time + "ms to execute everything");
                 schedule(delay, instrument, position)
             }).catch(reason => {
-                console.log(reason)
+                console.log(reason);
                 schedule(1000, instrument, position)
             })
         } else {
