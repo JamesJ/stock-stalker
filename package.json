@@ -1,7 +1,8 @@
 {
   "name": "stocks-bot",
   "version": "1.0.0",
-  "description": "",
+  "repository": "https://github.com/jamesj/stocks-bot.git",
+  "description": "Stock bot to monitor the stock market as a discord bot.",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
