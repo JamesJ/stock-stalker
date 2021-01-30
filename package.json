@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:js": "babel src --out-dir dist --copy-files",
     "build": "npm run build:js",
-    "start": "nodemon --watch ./src --exec babel-node src/index.js"
+    "start-dev": "nodemon --watch ./src --exec babel-node src/index.js",
+    "start": "npm run dist/index.js"
   },
   "keywords": [],
   "author": "",
