@@ -100,7 +100,7 @@ const getSingleStockInfo = stock =>
             .catch(err => reject(err));
     });
 
-const isHalted = instrument => {
+const isHalted = stock => {
     return new Promise((resolve, reject) => {
         if (!stock) {
             return reject(Error('Stock symbol required'));
