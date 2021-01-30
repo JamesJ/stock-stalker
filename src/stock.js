@@ -115,10 +115,10 @@ const isHalted = stock => {
             .get(url)
             .then((res) => {
                 const {data} = res;
-                if (!data || !data[instrument]) {
+                if (!data || !data[stock]) {
                     return reject(new Error(`Error retrieving halt status for symbol ${stock}`));
                 }
-                return resolve(data[instrument].status === "H");
+                return resolve(data[stock].status === "H");
             })
             .catch(err => reject(err));
     });
