@@ -1,48 +1,44 @@
 import axios from 'axios'
 
-let haltTime
-
 async function getPrice(instrument) {
     let obj = {};
-    let res
+    let res;
     try {
         res = await getSingleStockInfo(instrument);
     } catch (e) {
-        console.log("Failed to fetch data " + e)
+        console.log("Failed to fetch data " + e);
         return obj
     }
 
-    obj = getCurrentPricingObject(res)
+    obj = getCurrentPricingObject(res);
     return obj
 }
 
-let lastPrice
-let closed
+let lastPrice;
 async function getCurrentPricingObject(instrument) {
-    const obj = {}
-    obj.name = instrument.symbol
+    const obj = {};
+    obj.name = instrument.symbol;
 
 
     if (instrument.marketState === "PRE") {
-        obj.price = instrument.preMarketPrice
+        obj.price = instrument.preMarketPrice;
         obj.percentage = instrument.preMarketChangePercent
     } else if (instrument.marketState === "POST") {
-        obj.price = instrument.postMarketPrice
+        obj.price = instrument.postMarketPrice;
         obj.percentage = instrument.postMarketChangePercent
+    } else if (instrument.marketState === "CLOSED") {
+        obj.closed = true;
+        obj.lastPrice = instrument.postMarketPrice
     } else {
-        obj.price = instrument.regularMarketPrice
-        obj.percentage = instrument.regularMarketChangePercent
+        obj.price = instrument.regularMarketPrice;
+        obj.percentage = instrument.regularMarketChangePercent;
         if (!instrument.tradeable && obj.price === lastPrice) {
             //obj.halted = true
         }
-
-        if (instrument.marketState === "POSTPOST") {
-            obj.closed = true
-            obj.lastPrice = instrument.postMarketPrice
-        }
     }
+
     if (obj.price === undefined) {
-        obj.soon = true
+        obj.soon = true;
         obj.text = "No data (yet)";
         return obj
     }
@@ -56,9 +52,9 @@ async function getCurrentPricingObject(instrument) {
         obj.direction = "up"
     }
     obj.move = obj.price - lastPrice;
-    lastPrice = obj.price
+    lastPrice = obj.price;
 
-    let text
+    let text;
 
     if (obj.price == null) {
         text = "Failed to refresh";
@@ -78,9 +74,9 @@ async function getCurrentPricingObject(instrument) {
         }
     }
 
-    obj.text = text
+    obj.text = text;
 
-    obj.halted = await isHalted(instrument)
+    obj.halted = await isHalted(instrument);
     return obj
 }
 
@@ -113,7 +109,7 @@ const getSingleStockInfo = stock =>
     });
 
 const isHalted = instrument => {
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         if (!stock) {
             return reject(Error('Stock symbol required'));
         }
@@ -134,7 +130,7 @@ const isHalted = instrument => {
             })
             .catch(err => reject(err));
     });
-}
+};
 
 export default {
     getPrice: getPrice
