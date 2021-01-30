@@ -68,7 +68,7 @@ async function getCurrentPricingObject(instrument) {
 
     obj.text = text;
 
-    obj.halted = await isHalted(instrument);
+    obj.halted = await isHalted(instrument.symbol);
     return obj
 }
 
