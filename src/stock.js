@@ -68,7 +68,10 @@ async function getCurrentPricingObject(instrument) {
 
     obj.text = text;
 
-    obj.halted = await isHalted(instrument.symbol);
+    // no point checking if the symbol is halted, if the market is closed
+    if (!obj.closed) {
+        obj.halted = await isHalted(instrument.symbol);
+    }
     return obj
 }
 
