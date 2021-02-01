@@ -30,6 +30,7 @@ async function getCurrentPricingObject(instrument) {
         obj.closed = true;
         obj.price = instrument.postMarketPrice;
     } else {
+        obj.trading = true
         obj.price = instrument.regularMarketPrice;
         obj.percentage = instrument.regularMarketChangePercent;
     }
@@ -69,7 +70,7 @@ async function getCurrentPricingObject(instrument) {
     obj.text = text;
 
     // no point checking if the symbol is halted, if the market is closed
-    if (!obj.closed) {
+    if (obj.trading) {
         obj.halted = await isHalted(instrument.symbol);
     }
     return obj
