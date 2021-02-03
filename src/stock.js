@@ -71,7 +71,11 @@ async function getCurrentPricingObject(instrument) {
 
     // no point checking if the symbol is halted, if the market is closed
     if (obj.trading) {
-        obj.halted = await isHalted(instrument.symbol);
+        try {
+            obj.halted = await isHalted(instrument.symbol);
+        } catch(e) {
+            console.log(`Failed to fetch halt status, ${e}`)
+        }
     }
     return obj
 }
