@@ -14,7 +14,7 @@ async function getPrice(instrument) {
     return obj
 }
 
-let lastPrice;
+let lastPrices;
 async function getCurrentPricingObject(instrument) {
     const obj = {};
     obj.name = instrument.symbol;
@@ -41,15 +41,15 @@ async function getCurrentPricingObject(instrument) {
     }
 
 
-    if (obj.price === lastPrice) {
+    if (obj.price === lastPrices[instrument]) {
         obj.direction = "same"
-    } else if (obj.price < lastPrice) {
+    } else if (obj.price < lastPrices[instrument]) {
         obj.direction = "down"
-    } else if (obj.price > lastPrice) {
+    } else if (obj.price > lastPrices[instrument]) {
         obj.direction = "up"
     }
-    obj.move = obj.price - lastPrice;
-    lastPrice = obj.price;
+    obj.move = obj.price - lastPrices[instrument];
+    lastPrices[instrument] = obj.price;
 
     let text;
 
