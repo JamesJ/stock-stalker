@@ -54,7 +54,7 @@ class Ticker {
         this.updateStatus(pricing);
 
         if (pricing.direction !== "same") {
-            await this.setNickname(pricing.text, pricing.direction)
+            await this.setNickname(pricing.text, pricing.direction, pricing.closed)
         }
 
 
@@ -85,7 +85,7 @@ class Ticker {
         return this.#client.login(this.#ticker.token);
     }
 
-    async setNickname(name, direction) {
+    async setNickname(name, direction, closed) {
 
         const promises = [];
 
@@ -95,7 +95,7 @@ class Ticker {
             const member = guild.members.resolve(this.#client.user.id);
             const promise = new Promise((resolve, reject) => {
                 member.setNickname(text, "Market Move").then(() => {
-                    this.refreshRoles(member, guild, direction === "up", resolve, reject);
+                    this.refreshRoles(member, guild, direction === "up" || closed, resolve, reject);
                 }).catch(reason => reject(reason));
             });
             promises.push(promise);
@@ -107,10 +107,14 @@ class Ticker {
     refreshRoles(member, guild, up, resolve, reject) {
         const role = this.#config.guilds[guild.id];
         if (up) {
+            if (member.roles.contains(role)) resolve();
+
             // going up
             this.debug(`Ticker ${this.#id} has gone up, so adding role ${role}`)
             member.roles.add(role).then(() => resolve()).catch(reason => reject(reason));
         } else {
+            if (!member.roles.contains(role)) resolve();
+
             this.debug(`Ticker ${this.#id} has gone down, so removing role ${role}`)
             member.roles.remove(role).then(() => resolve()).catch(reason => reject(reason));
         }
