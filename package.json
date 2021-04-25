@@ -11,13 +11,15 @@
     "start-dev": "nodemon --watch ./src --exec babel-node src/main.js",
     "start": "npm run dist/main.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "discord",
+    "stocks"
+  ],
+  "author": "JamesJ",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
-    "discord.js": "^12.5.1",
-    "yargs": "^16.2.0"
+    "discord.js": "^12.5.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
