@@ -107,13 +107,19 @@ class Ticker {
     refreshRoles(member, guild, up, resolve, reject) {
         const role = this.#config.guilds[guild.id];
         if (up) {
-            if (member.roles.contains(role)) resolve();
+            if (member.roles.contains(role)) {
+                resolve();
+                return;
+            }
 
             // going up
             this.debug(`Ticker ${this.#id} has gone up, so adding role ${role}`)
             member.roles.add(role).then(() => resolve()).catch(reason => reject(reason));
         } else {
-            if (!member.roles.contains(role)) resolve();
+            if (!member.roles.contains(role)) {
+                resolve();
+                return;
+            }
 
             this.debug(`Ticker ${this.#id} has gone down, so removing role ${role}`)
             member.roles.remove(role).then(() => resolve()).catch(reason => reject(reason));
