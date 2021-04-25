@@ -29,6 +29,7 @@ async function getCurrentPricingObject(instrument, crypto) {
         obj.closed = true;
         obj.price = instrument.postMarketPrice;
     } else {
+        obj.trading = true
         obj.price = instrument.regularMarketPrice;
         obj.percentage = instrument.regularMarketChangePercent;
     }
