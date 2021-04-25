@@ -19,7 +19,6 @@ async function getCurrentPricingObject(instrument) {
     const obj = {};
     obj.name = instrument.symbol;
 
-
     if (instrument.marketState === "PRE") {
         obj.price = instrument.preMarketPrice;
         obj.percentage = instrument.preMarketChangePercent;
