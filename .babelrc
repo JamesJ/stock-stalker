@@ -9,5 +9,5 @@
       }
     ]
   ],
-  "plugins": ["babel-plugin-transform-es2015-modules-simple-commonjs"]
+  "plugins": ["babel-plugin-transform-es2015-modules-simple-commonjs", "@babel/plugin-syntax-class-properties"]
 }

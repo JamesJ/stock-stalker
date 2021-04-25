@@ -2,3 +2,4 @@ node_modules/
 *.xml
 build/
 .idea/
+config.json

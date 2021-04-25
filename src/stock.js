@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 async function getPrice(instrument) {
+    console.log("Fetching price for " + instrument)
     let obj = {};
     let res;
     try {
@@ -14,7 +15,7 @@ async function getPrice(instrument) {
     return obj
 }
 
-let lastPrices;
+let lastPrices = {};
 async function getCurrentPricingObject(instrument) {
     const obj = {};
     obj.name = instrument.symbol;
