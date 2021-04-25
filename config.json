@@ -9,5 +9,8 @@
   },
   "guilds": {
     "guild id": "<green role id>"
+  },
+  "defaults": {
+    "loading_message": "stocks go brrr"
   }
 }
