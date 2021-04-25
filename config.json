@@ -4,7 +4,8 @@
   "tickers": {
     "GOOG": {
       "token": "<discord bot token>",
-      "refresh_rate": 500
+      "refresh_rate": 500,
+      "position": "A"
     }
   },
   "guilds": {
