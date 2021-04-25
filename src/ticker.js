@@ -47,7 +47,7 @@ class Ticker {
             await this.connect();
         }
         const instrument = this.#id;
-        const pricing = await stock.getPrice(instrument);
+        const pricing = await stock.getPrice(instrument, this.#ticker.crypto);
 
         this.updateStatus(pricing);
 

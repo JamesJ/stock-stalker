@@ -5,7 +5,8 @@
     "AAPL": {
       "token": "<token>",
       "refresh_rate": 500,
-      "position": "A"
+      "position": "A",
+      "crypto": false,
     },
     "NIO": {
       "token": "<token>",

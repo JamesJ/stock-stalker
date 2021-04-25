@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-async function getPrice(instrument) {
+async function getPrice(instrument, crypto) {
     let obj = {};
     let res;
     try {
@@ -10,12 +10,12 @@ async function getPrice(instrument) {
         return obj
     }
 
-    obj = getCurrentPricingObject(res);
+    obj = getCurrentPricingObject(res, crypto);
     return obj
 }
 
 let lastPrices = {};
-async function getCurrentPricingObject(instrument) {
+async function getCurrentPricingObject(instrument, crypto) {
     const obj = {};
     obj.name = instrument.symbol;
 
@@ -68,7 +68,7 @@ async function getCurrentPricingObject(instrument) {
     obj.text = text;
 
     // no point checking if the symbol is halted, if the market is closed
-    if (!obj.closed) {
+    if (!obj.closed && !crypto) {
         obj.halted = await isHalted(instrument.symbol);
     }
     return obj
