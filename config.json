@@ -3,7 +3,8 @@
   "debug": false,
   "tickers": {
     "GOOG": {
-      "token": "<discord bot token>"
+      "token": "<discord bot token>",
+      "refresh_rate": 500
     }
   },
   "guilds": {
