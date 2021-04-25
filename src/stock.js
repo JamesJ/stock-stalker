@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 async function getPrice(instrument) {
-    console.log("Fetching price for " + instrument)
     let obj = {};
     let res;
     try {
@@ -41,15 +40,15 @@ async function getCurrentPricingObject(instrument) {
     }
 
 
-    if (obj.price === lastPrices[instrument]) {
+    if (obj.price === lastPrices[obj.name]) {
         obj.direction = "same"
-    } else if (obj.price < lastPrices[instrument]) {
+    } else if (obj.price < lastPrices[obj.name]) {
         obj.direction = "down"
-    } else if (obj.price > lastPrices[instrument]) {
+    } else if (obj.price > lastPrices[obj.name]) {
         obj.direction = "up"
     }
-    obj.move = obj.price - lastPrices[instrument];
-    lastPrices[instrument] = obj.price;
+    obj.move = obj.price - lastPrices[obj.name];
+    lastPrices[obj.name] = obj.price;
 
     let text;
 
