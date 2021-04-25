@@ -46,24 +46,38 @@ class Ticker {
         if (!this.#connected) {
             await this.connect();
         }
+        const now = new Date().getMilliseconds();
+
         const instrument = this.#id;
         const pricing = await stock.getPrice(instrument, this.#ticker.crypto);
 
         this.updateStatus(pricing);
 
-
         if (pricing.direction !== "same") {
             await this.setNickname(pricing.text, pricing.direction)
         }
 
-        await this.schedule();
+
+        const finish = new Date().getMilliseconds();
+        const time = finish - now;
+
+        let delay = this.#refreshRate;
+        if (time > this.#refreshRate) {
+            delay = 50
+        } else {
+            // otherwise, we'll take a 1sec delay and minus the time
+            // this is to ensure, in theory, it gets updated every minute
+            // rather than 1 minute from the finish of the update
+            delay -= time
+        }
+        await this.schedule(delay);
     }
 
-    async schedule() {
+    async schedule(delay) {
         const self = this;
         setTimeout(function () {
             self.start();
-        }, this.#refreshRate)
+        }, delay)
     }
 
     login() {
@@ -72,6 +86,7 @@ class Ticker {
     }
 
     async setNickname(name, direction) {
+
         const promises = [];
 
         let text = this.#ticker.position + "). " + name;
