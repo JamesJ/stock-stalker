@@ -1,6 +1,6 @@
 {
   "name": "stocks-bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": "https://github.com/jamesj/stocks-bot.git",
   "description": "Stock bot to monitor the stock market as a discord bot.",
   "main": "src/index.js",
