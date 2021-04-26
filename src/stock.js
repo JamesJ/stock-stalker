@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-async function getPrice(instrument) {
+async function getPrice(instrument, crypto) {
     let obj = {};
     let res;
     try {
@@ -10,15 +10,14 @@ async function getPrice(instrument) {
         return obj
     }
 
-    obj = getCurrentPricingObject(res);
+    obj = getCurrentPricingObject(res, crypto);
     return obj
 }
 
-let lastPrice;
-async function getCurrentPricingObject(instrument) {
+let lastPrices = {};
+async function getCurrentPricingObject(instrument, crypto) {
     const obj = {};
     obj.name = instrument.symbol;
-
 
     if (instrument.marketState === "PRE") {
         obj.price = instrument.preMarketPrice;
@@ -42,15 +41,15 @@ async function getCurrentPricingObject(instrument) {
     }
 
 
-    if (obj.price === lastPrice) {
+    if (obj.price === lastPrices[obj.name]) {
         obj.direction = "same"
-    } else if (obj.price < lastPrice) {
+    } else if (obj.price < lastPrices[obj.name]) {
         obj.direction = "down"
-    } else if (obj.price > lastPrice) {
+    } else if (obj.price > lastPrices[obj.name]) {
         obj.direction = "up"
     }
-    obj.move = obj.price - lastPrice;
-    lastPrice = obj.price;
+    obj.move = obj.price - lastPrices[obj.name];
+    lastPrices[obj.name] = obj.price;
 
     let text;
 
@@ -70,12 +69,8 @@ async function getCurrentPricingObject(instrument) {
     obj.text = text;
 
     // no point checking if the symbol is halted, if the market is closed
-    if (obj.trading) {
-        try {
-            obj.halted = await isHalted(instrument.symbol);
-        } catch(e) {
-            console.log(`Failed to fetch halt status, ${e}`)
-        }
+    if (!obj.closed && !crypto) {
+        obj.halted = await isHalted(instrument.symbol);
     }
     return obj
 }

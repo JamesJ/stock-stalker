@@ -1,0 +1,23 @@
+{
+  "refresh_rate": 2500,
+  "debug": true,
+  "tickers": {
+    "AAPL": {
+      "token": "<token>",
+      "refresh_rate": 500,
+      "position": "A",
+      "crypto": false,
+    },
+    "NIO": {
+      "token": "<token>",
+      "refresh_rate": 500,
+      "position": "B"
+    }
+  },
+  "guilds": {
+    "guild id": "role id"
+  },
+  "defaults": {
+    "loading_message": "stocks go brrr"
+  }
+}
