@@ -74,9 +74,8 @@ class Ticker {
     }
 
     async schedule(delay) {
-        const self = this;
-        setTimeout(function () {
-            self.start();
+        setTimeout(() => {
+            this.start();
         }, delay)
     }
 
@@ -85,12 +84,18 @@ class Ticker {
         return this.#client.login(this.#ticker.token);
     }
 
+    fetchPosition(guild) {
+        if (this.#ticker.positions && this.#ticker.positions[guild.id]) {
+            return this.#ticker.positions[guild.id];
+        }
+        return this.#ticker.position;
+    }
+
     async setNickname(name, direction, closed) {
         const promises = [];
 
-        let text = this.#ticker.position + "). " + name;
-
         this.#client.guilds.cache.forEach(guild => {
+            let text = this.fetchPosition(guild) + "). " + name;
             const member = guild.members.resolve(this.#client.user.id);
             const promise = new Promise((resolve, reject) => {
                 member.setNickname(text, "Market Move").then(() => {
