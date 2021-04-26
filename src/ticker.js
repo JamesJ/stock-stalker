@@ -24,13 +24,12 @@ class Ticker {
     async connect() {
         this.login();
 
-        const self = this;
         const promise = new Promise((resolve, reject) => {
             this.#client.on('ready', () => {
-                self.debug(`Logged in as ${this.#client.user.tag}!`);
+                this.debug(`Logged in as ${this.#client.user.tag}!`);
                 this.#lastPresenceUpdate = Date.now();
 
-                self.debug("Setting client activity")
+                this.debug("Setting client activity")
                 this.#client.user.setActivity(this.#ticker.loading_message || this.#config.defaults.loading_message, {type: 'WATCHING'})
                     .then(value => resolve(value))
                     .catch(reason => reject(reason));
