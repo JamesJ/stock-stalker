@@ -6,12 +6,15 @@
       "token": "<token>",
       "refresh_rate": 500,
       "position": "A",
-      "crypto": false,
+      "crypto": false
     },
     "NIO": {
       "token": "<token>",
       "refresh_rate": 500,
-      "position": "B"
+      "position": "B",
+      "positions": {
+        "<guild id>": "A"
+      }
     }
   },
   "guilds": {
