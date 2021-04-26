@@ -86,7 +86,6 @@ class Ticker {
     }
 
     async setNickname(name, direction, closed) {
-
         const promises = [];
 
         let text = this.#ticker.position + "). " + name;
@@ -117,6 +116,9 @@ class Ticker {
     }
 
     updateStatus(obj) {
+        if (!obj.percentage) {
+            return;
+        }
         const now = Date.now();
         if (this.#lastPresenceUpdate < (now - 4001) && !obj.soon) {
             let status;
