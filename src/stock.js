@@ -48,12 +48,15 @@ async function getCurrentPricingObject(instrument, crypto) {
     } else if (obj.price > lastPrices[obj.name]) {
         obj.direction = "up"
     }
+    if (!obj.price) {
+        obj.price = lastPrices[obj.price];
+    }
     obj.move = obj.price - lastPrices[obj.name];
     lastPrices[obj.name] = obj.price;
 
     let text;
 
-    if (obj.price == null) {
+    if (obj.price === null) {
         text = "Failed to refresh";
     } else {
         if (obj.halted || obj.closed) {
