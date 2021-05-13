@@ -21,39 +21,40 @@ async function getCurrentPricingObject(instrument, crypto) {
     obj.name = instrument.symbol;
 
     if (instrument.marketState === "PRE") {
+        obj.market = "pre";
         obj.price = instrument.preMarketPrice;
-        obj.percentage = instrument.preMarketChangePercent;
     } else if (instrument.marketState === "POST") {
+        obj.market = "post";
         obj.price = instrument.postMarketPrice;
-        obj.percentage = instrument.postMarketChangePercent;
     } else if (instrument.marketState === "CLOSED") {
         obj.closed = true;
         obj.price = instrument.postMarketPrice;
+        obj.market = "closed";
     } else {
         obj.trading = true
         obj.price = instrument.regularMarketPrice;
-        obj.percentage = instrument.regularMarketChangePercent;
+        obj.market = ""
     }
 
     if (obj.price === undefined) {
         if (lastPrices[obj.name]) {
             obj.price = lastPrices[obj.name];
         } else {
-            obj.soon = true;
-            obj.text = "No data (yet)";
-            return obj;
+            obj.price = instrument.regularMarketPrice;
         }
     }
 
 
-    if (obj.price === lastPrices[obj.name]) {
-        obj.direction = "same"
-    } else if (obj.price < lastPrices[obj.name]) {
-        obj.direction = "down"
-    } else if (obj.price > lastPrices[obj.name]) {
-        obj.direction = "up"
+    if (lastPrices[obj.name]) {
+        if (obj.price === lastPrices[obj.name]) {
+            obj.direction = "same"
+        } else if (obj.price < lastPrices[obj.name]) {
+            obj.direction = "down"
+        } else if (obj.price > lastPrices[obj.name]) {
+            obj.direction = "up"
+        }
+        obj.move = obj.price - lastPrices[obj.name];
     }
-    obj.move = obj.price - lastPrices[obj.name];
     lastPrices[obj.name] = obj.price;
 
     let text;
@@ -62,7 +63,7 @@ async function getCurrentPricingObject(instrument, crypto) {
         text = "$" + obj.price.toFixed(2)
     } else {
         text = "$" + obj.price.toFixed(2);
-        if (!isNaN(obj.move) && obj.move !== 0 && obj.move !== undefined) {
+        if (obj.move && !isNaN(obj.move) && obj.move !== 0) {
             text += " (" + (obj.move > 0 ? "+" : "") + obj.move.toFixed(2) + ")";
         }
         

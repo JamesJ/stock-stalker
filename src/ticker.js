@@ -56,7 +56,6 @@ class Ticker {
             await this.setNickname(pricing.text, pricing.direction, pricing.closed)
         }
 
-
         const finish = new Date().getMilliseconds();
         const time = finish - now;
 
@@ -98,7 +97,7 @@ class Ticker {
             const member = guild.members.resolve(this.#client.user.id);
             const promise = new Promise((resolve, reject) => {
                 member.setNickname(text, "Market Move").then(() => {
-                    this.refreshRoles(member, guild, direction === "up" || closed, resolve, reject);
+                    this.refreshRoles(member, guild, direction !== "down" || closed, resolve, reject);
                 }).catch(reason => reject(reason));
             });
             promises.push(promise);
@@ -131,15 +130,7 @@ class Ticker {
             } else if (obj.closed) {
                 status = "the market sleep, you should too."
             } else {
-                status = "$" + obj.name + " go ";
-                if (obj.direction === "down") {
-                    status += "↘"
-                } else {
-                    status += "↗"
-                }
-
-                status += "(" + obj.percentage.toFixed(2) + "%)"
-
+                status = "$" + obj.name + " " + obj.market;
             }
             this.#client.user.setActivity(status, {type: 'WATCHING'});
 
@@ -149,7 +140,8 @@ class Ticker {
 
     debug(message) {
         if (this.#config.debug) {
-            console.log("[DEBUG] [" + this.#id + "] " + message);
+            const date = new Date();
+            console.log(`[${date.getHours()}:${date.getMinutes()}.${date.getMilliseconds()}] [DEBUG] [${this.#id}] ${message}`);
         }
     }
 }
