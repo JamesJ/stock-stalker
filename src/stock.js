@@ -15,6 +15,7 @@ async function getPrice(instrument, crypto) {
 }
 
 let lastPrices = {};
+
 async function getCurrentPricingObject(instrument, crypto) {
     const obj = {};
     obj.name = instrument.symbol;
@@ -35,9 +36,13 @@ async function getCurrentPricingObject(instrument, crypto) {
     }
 
     if (obj.price === undefined) {
-        obj.soon = true;
-        obj.text = "No data (yet)";
-        return obj
+        if (lastPrices[obj.name]) {
+            obj.price = lastPrices[obj.name];
+        } else {
+            obj.soon = true;
+            obj.text = "No data (yet)";
+            return obj;
+        }
     }
 
 
@@ -48,25 +53,19 @@ async function getCurrentPricingObject(instrument, crypto) {
     } else if (obj.price > lastPrices[obj.name]) {
         obj.direction = "up"
     }
-    if (!obj.price) {
-        obj.price = lastPrices[obj.price];
-    }
     obj.move = obj.price - lastPrices[obj.name];
     lastPrices[obj.name] = obj.price;
 
     let text;
 
-    if (obj.price === null) {
-        text = "Failed to refresh";
+    if (obj.halted || obj.closed) {
+        text = "$" + obj.price.toFixed(2)
     } else {
-        if (obj.halted || obj.closed) {
-            text = "$" + obj.price.toFixed(2)
-        } else {
-            text = "$" + obj.price.toFixed(2);
-            if (!isNaN(obj.move) && obj.move !== 0 && obj.move !== undefined) {
-                text += " (" + (obj.move > 0 ? "+" : "") + obj.move.toFixed(2) + ")";
-            }
+        text = "$" + obj.price.toFixed(2);
+        if (!isNaN(obj.move) && obj.move !== 0 && obj.move !== undefined) {
+            text += " (" + (obj.move > 0 ? "+" : "") + obj.move.toFixed(2) + ")";
         }
+        
     }
 
     obj.text = text;
