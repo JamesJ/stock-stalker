@@ -50,11 +50,16 @@ class Ticker {
         const instrument = this.#id;
         const pricing = await stock.getPrice(instrument, this.#ticker.crypto);
 
-        this.updateStatus(pricing);
+        if (pricing) {
+            this.updateStatus(pricing);
 
-        if (pricing.direction !== "same") {
-            await this.setNickname(pricing.text, pricing.direction, pricing.closed)
+            if (pricing.direction && pricing.direction !== "same") {
+                if (pricing.text) {
+                    await this.setNickname(pricing.text, pricing.direction, pricing.closed)
+                }
+            }
         }
+
 
         const finish = new Date().getMilliseconds();
         const time = finish - now;
